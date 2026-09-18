@@ -1,0 +1,30 @@
+name: Build clean offline and GitHub-ready versions
+
+on:
+  push:
+    paths:
+      - "scripts/build_project.py"
+      - "assets/maps/japan-major-cities.svg"
+      - ".github/workflows/build-clean-project.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build project
+        run: |
+          python -m pip install --quiet requests
+          python scripts/build_project.py
+      - name: Commit build
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html README.md assets dist
+          git add -u assets
+          git commit -m "Build offline and clean GitHub-ready Japan experience"
+          git push
