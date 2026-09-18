@@ -1,24 +1,17 @@
-# Japan Under the Shoguns — Interactive Year 8 Experience
+# Japan Under the Shoguns
 
-An immersive, interactive classroom resource about Japan under the shoguns.
+Interactive Year 8 history experience.
 
-## Features
+## Clean project structure
 
-- Interactive geography and island explorer
-- Clickable historical city map (Nara, Kyoto, Kamakura, Edo/Tokyo, Osaka, Nagasaki)
-- Era Evidence Explorer from Nara to Meiji
-- Warring States → Tokugawa unification journey
-- Feudal political power and social structure visualisation
-- Samurai, Tokugawa policies, foreign contact and Meiji sections
-- 50 scored quiz questions with instant feedback
-- Responsive classroom/projector-friendly layout
+index.html
+assets/css/site.css
+assets/js/site.js
+assets/maps/japan-major-cities.svg
+assets/images/content/
+assets/images/eras/
+assets/SOURCES.md
+dist/Japan_Under_the_Shoguns_OFFLINE.html
+dist/Japan_GitHub_Ready.zip
 
-## Run locally
-
-Open `index.html` in a modern browser.
-
-## Sources and acknowledgements
-
-Source acknowledgements are displayed inside the experience where evidence images are used. Some photographs in the site load from Wikimedia Commons.
-
-Created as a self-contained teaching experience for the Japan Under the Shoguns unit.
+The repository root is ready for GitHub Pages.
