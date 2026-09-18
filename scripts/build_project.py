@@ -51,8 +51,18 @@ source_lines = [
     "",
 ]
 for i, url in enumerate(remote_urls, 1):
-    resp = session.get(url, timeout=60, allow_redirects=True)
-    resp.raise_for_status()
+    resp = None
+    for attempt in range(7):
+        resp = session.get(url, timeout=60, allow_redirects=True)
+        if resp.status_code == 200:
+            break
+        if resp.status_code in (429, 403, 502, 503, 504):
+            time.sleep(5 + attempt * 6)
+            continue
+        resp.raise_for_status()
+    if resp is None or resp.status_code != 200:
+        raise RuntimeError("Could not download image after retries: " + url)
+    time.sleep(1.5)
     ctype = (resp.headers.get("content-type") or "").split(";")[0].strip()
     ext = mimetypes.guess_extension(ctype) or Path(urlparse(resp.url).path).suffix or ".jpg"
     if ext == ".jpe":
