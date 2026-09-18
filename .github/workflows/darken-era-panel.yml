@@ -1,0 +1,64 @@
+name: Darken era evidence panel
+
+on:
+  push:
+    paths:
+      - ".github/workflows/darken-era-panel.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply dark era panel styling
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path("index.html")
+          s=p.read_text(encoding="utf-8")
+          css=r"""
+          <style id="era-dark-panel-fix">
+          .era-css-only .era-copy{
+            background:linear-gradient(145deg,#102a26 0%,#173c35 58%,#0f2421 100%) !important;
+            border:1px solid rgba(255,209,126,.20) !important;
+            color:#ffffff !important;
+            box-shadow:0 18px 42px rgba(0,0,0,.16);
+          }
+          .era-css-only .era-copy h3,
+          .era-css-only .era-copy > p,
+          .era-css-only .era-point span{color:#ffffff !important}
+          .era-css-only .era-range{
+            display:inline-flex;width:max-content;padding:7px 11px;border-radius:999px;
+            background:#ffd17e !important;color:#24160e !important
+          }
+          .era-css-only .era-point{border-top:1px solid rgba(255,255,255,.11)}
+          .era-css-only .era-point:first-child{border-top:0}
+          .era-css-only .era-point i{
+            background:rgba(255,209,126,.15) !important;color:#ffd17e !important;
+            border:1px solid rgba(255,209,126,.22)
+          }
+          .era-css-only .evidence-note{
+            background:rgba(0,0,0,.24) !important;
+            border:1px solid rgba(255,255,255,.11) !important;
+            color:#ffffff !important
+          }
+          .era-css-only .evidence-note b{color:#ffd17e !important}
+          .era-css-only .evidence-note p,
+          .era-css-only .era-source-note{color:#f6efe4 !important}
+          </style>
+          """
+          if 'id="era-dark-panel-fix"' not in s:
+              s=s.replace("</head>",css+"\n</head>",1)
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Commit styling fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Darken era evidence information panel"
+          git push
