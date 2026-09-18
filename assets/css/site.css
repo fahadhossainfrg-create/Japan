@@ -686,3 +686,18 @@ body{
   letter-spacing:.10em;
   vertical-align:1px;
 }
+
+
+/* EMBEDDED MAP SVG FIX */
+.map-exact .map-canvas .embedded-map-svg{
+  display:block;
+  width:100%;
+  line-height:0;
+  background:#4aa6d8;
+}
+.map-exact .map-canvas .embedded-map-svg > svg{
+  display:block;
+  width:100%;
+  height:auto;
+  max-width:100%;
+}
