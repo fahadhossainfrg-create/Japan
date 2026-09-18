@@ -1,0 +1,102 @@
+name: Install final inline Japan map
+
+on:
+  push:
+    paths:
+      - ".github/workflows/install-map-v6.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install working no-JavaScript map
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path("index.html")
+          s=p.read_text(encoding="utf-8")
+
+          css=r"""
+          <style id="map-v6-final">
+          .map-explorer.map-v6{display:block!important;margin:22px 0 30px}
+          .map-v6 .city-radio{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
+          .map-v6 .map-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,.55fr);gap:22px;align-items:stretch}
+          .map-v6 .map-canvas{position:relative;overflow:hidden;border-radius:24px;background:#78b9e5;border:1px solid rgba(31,64,94,.22);box-shadow:0 18px 42px rgba(31,41,55,.12)}
+          .map-v6 .map-canvas>svg{display:block;width:100%;height:auto;background:#78b9e5}
+          .map-v6 .map-dot{position:absolute;width:34px;height:34px;transform:translate(-50%,-50%);cursor:pointer;z-index:20;border-radius:50%;display:block;touch-action:manipulation}
+          .map-v6 .map-dot::before{content:'';position:absolute;left:50%;top:50%;width:12px;height:12px;transform:translate(-50%,-50%);border-radius:50%;background:#d71920;border:3px solid #fff;box-shadow:0 0 0 2px rgba(88,19,23,.28),0 4px 10px rgba(0,0,0,.3);transition:.16s ease}
+          .map-v6 .map-dot::after{content:'';position:absolute;left:50%;top:50%;width:26px;height:26px;transform:translate(-50%,-50%);border-radius:50%;border:2px solid rgba(215,25,32,.35);transition:.16s ease}
+          .map-v6 .map-dot:hover::before,.map-v6 .map-dot:active::before{transform:translate(-50%,-50%) scale(1.25);background:#991b1b}
+          #map-city-kyoto:checked~.map-layout label[for="map-city-kyoto"]::before,#map-city-nara:checked~.map-layout label[for="map-city-nara"]::before,#map-city-osaka:checked~.map-layout label[for="map-city-osaka"]::before,#map-city-edo:checked~.map-layout label[for="map-city-edo"]::before,#map-city-kamakura:checked~.map-layout label[for="map-city-kamakura"]::before,#map-city-nagasaki:checked~.map-layout label[for="map-city-nagasaki"]::before{background:#6b0f12;transform:translate(-50%,-50%) scale(1.35);box-shadow:0 0 0 6px rgba(215,25,32,.18),0 5px 12px rgba(0,0,0,.32)}
+          .map-v6 .map-credit{padding:11px 14px;background:rgba(255,255,255,.94);font-size:.79rem;line-height:1.45;color:#334155;border-top:1px solid rgba(31,64,94,.12)}
+          .map-v6 .city-card{display:flex;flex-direction:column;min-height:100%;padding:22px}.map-v6 .map-instruction{padding:11px 13px;margin:0 0 14px;border-radius:14px;background:#f6efe4;color:#63492d;line-height:1.5}
+          .map-v6 .city-details{flex:1;min-height:310px;padding:22px;border-radius:20px;background:linear-gradient(145deg,#fff,#f7f1e6);border:1px solid rgba(148,103,43,.18)}
+          .map-v6 .city-detail{display:none}.map-v6 .city-default{display:block;color:#554839;line-height:1.6}
+          #map-city-kyoto:checked~.map-layout .city-default,#map-city-nara:checked~.map-layout .city-default,#map-city-osaka:checked~.map-layout .city-default,#map-city-edo:checked~.map-layout .city-default,#map-city-kamakura:checked~.map-layout .city-default,#map-city-nagasaki:checked~.map-layout .city-default{display:none}
+          #map-city-kyoto:checked~.map-layout .detail-kyoto,#map-city-nara:checked~.map-layout .detail-nara,#map-city-osaka:checked~.map-layout .detail-osaka,#map-city-edo:checked~.map-layout .detail-edo,#map-city-kamakura:checked~.map-layout .detail-kamakura,#map-city-nagasaki:checked~.map-layout .detail-nagasaki{display:block}
+          .map-v6 .city-kicker{display:inline-block;margin-bottom:8px;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#9a3412}
+          .map-v6 .city-detail h3{font-size:1.65rem;margin:0 0 5px;color:#2e241a}.map-v6 .city-period{font-size:.9rem;font-weight:700;color:#785f40;margin-bottom:14px}.map-v6 .city-detail h4{font-size:.84rem;margin:14px 0 4px;text-transform:uppercase;letter-spacing:.08em;color:#9a3412}.map-v6 .city-detail p{margin:0;color:#504336;line-height:1.62}
+          @media(max-width:900px){.map-v6 .map-layout{grid-template-columns:1fr}.map-v6 .city-details{min-height:250px}.map-v6 .map-dot{width:38px;height:38px}}
+          </style>
+          """
+          if 'id="map-v6-final"' not in s:
+              s=s.replace("</head>",css+"\n</head>",1)
+
+          svg='''<svg viewBox="0 0 1000 798" role="img" aria-label="Geographic map of Japan"><rect width="1000" height="798" fill="#78b9e5"/><g fill="#fff" stroke="#334155" stroke-width="3" stroke-linejoin="round"><path d="M 143 638 L 132 642 L 127 654 L 118 656 L 115 653 L 116 656 L 107 661 L 100 658 L 97 669 L 93 666 L 86 666 L 85 669 L 88 672 L 93 672 L 95 676 L 103 678 L 104 685 L 98 689 L 93 687 L 90 679 L 88 680 L 88 684 L 99 693 L 110 688 L 109 685 L 113 683 L 110 676 L 119 669 L 130 677 L 130 681 L 139 690 L 139 694 L 135 696 L 141 698 L 132 715 L 118 726 L 117 737 L 124 743 L 124 752 L 118 757 L 119 760 L 130 760 L 136 763 L 131 758 L 131 749 L 135 745 L 135 741 L 143 737 L 151 742 L 145 750 L 150 757 L 146 768 L 155 766 L 160 760 L 157 754 L 161 751 L 175 752 L 180 743 L 180 727 L 193 704 L 191 702 L 208 686 L 198 674 L 199 671 L 188 671 L 182 666 L 184 662 L 189 662 L 195 657 L 192 651 L 181 655 L 166 654 L 157 648 L 153 640 Z"/><path d="M 347 625 L 346 624 L 342 625 L 329 619 L 317 617 L 312 620 L 302 623 L 301 631 L 295 636 L 291 637 L 280 636 L 276 638 L 270 638 L 262 631 L 256 634 L 250 640 L 250 646 L 246 650 L 240 652 L 233 657 L 235 659 L 235 664 L 239 664 L 242 669 L 239 679 L 242 682 L 249 683 L 251 686 L 250 688 L 252 690 L 260 689 L 262 685 L 262 681 L 265 677 L 268 677 L 275 670 L 275 665 L 279 660 L 297 653 L 306 653 L 313 655 L 320 659 L 324 664 L 326 664 L 329 657 L 339 648 L 351 642 L 349 640 L 351 636 L 348 635 L 346 632 Z"/><path d="M 709 267 L 688 260 L 681 274 L 705 272 L 697 293 L 685 287 L 672 294 L 666 275 L 656 274 L 654 293 L 633 304 L 639 326 L 624 340 L 636 341 L 642 355 L 605 434 L 576 449 L 554 475 L 489 502 L 466 480 L 491 464 L 467 470 L 465 498 L 425 538 L 429 555 L 409 563 L 380 561 L 382 551 L 284 566 L 257 562 L 203 602 L 156 618 L 155 630 L 200 628 L 215 636 L 229 614 L 246 621 L 354 593 L 396 603 L 379 620 L 377 636 L 394 652 L 414 655 L 440 622 L 468 617 L 449 604 L 459 582 L 496 594 L 492 601 L 537 601 L 571 577 L 579 582 L 576 601 L 592 571 L 615 569 L 630 550 L 645 558 L 630 570 L 630 587 L 654 575 L 657 560 L 678 549 L 663 523 L 688 481 L 682 431 L 690 418 L 713 415 L 711 404 L 742 359 L 730 323 L 709 302 Z"/><path d="M 917 109 L 898 126 L 886 130 L 853 124 L 851 118 L 836 120 L 780 84 L 739 42 L 726 48 L 722 57 L 734 92 L 726 107 L 725 129 L 709 139 L 714 162 L 701 172 L 657 162 L 666 179 L 654 191 L 630 198 L 627 215 L 646 232 L 646 240 L 637 253 L 646 260 L 655 255 L 657 247 L 671 239 L 687 244 L 694 241 L 675 228 L 664 228 L 648 218 L 653 204 L 665 197 L 674 198 L 688 213 L 710 198 L 735 197 L 807 230 L 815 205 L 842 183 L 859 176 L 884 179 L 894 171 L 903 175 L 909 168 L 928 165 L 912 160 L 913 153 L 902 135 Z"/></g></svg>'''
+          block=f'''
+          <div class="map-explorer map-v6 reveal">
+            <input class="city-radio" type="radio" name="historic-city" id="map-city-kyoto">
+            <input class="city-radio" type="radio" name="historic-city" id="map-city-nara">
+            <input class="city-radio" type="radio" name="historic-city" id="map-city-osaka">
+            <input class="city-radio" type="radio" name="historic-city" id="map-city-edo">
+            <input class="city-radio" type="radio" name="historic-city" id="map-city-kamakura">
+            <input class="city-radio" type="radio" name="historic-city" id="map-city-nagasaki">
+            <div class="map-layout">
+              <div class="map-canvas">
+                {svg}
+                <label class="map-dot" for="map-city-kyoto" style="left:37.7%;top:76.6%" aria-label="Reveal Kyoto"></label>
+                <label class="map-dot" for="map-city-nara" style="left:38.6%;top:78.8%" aria-label="Reveal Nara"></label>
+                <label class="map-dot" for="map-city-osaka" style="left:36.1%;top:79.2%" aria-label="Reveal Osaka"></label>
+                <label class="map-dot" for="map-city-edo" style="left:63.8%;top:71.2%" aria-label="Reveal Edo or Tokyo"></label>
+                <label class="map-dot" for="map-city-kamakura" style="left:62.5%;top:73.4%" aria-label="Reveal Kamakura"></label>
+                <label class="map-dot" for="map-city-nagasaki" style="left:10.5%;top:88.2%" aria-label="Reveal Nagasaki"></label>
+                <div class="map-credit"><b>Interactive historical map:</b> click a red dot placed directly on the geographic outline of Japan. The city name appears only after selection.</div>
+              </div>
+              <div class="card city-card">
+                <h3>Key Cities of Historical Japan</h3>
+                <div class="map-instruction"><b>Click any red dot on Japan.</b> The map works without JavaScript, so the city information will still open even if another script on the page fails.</div>
+                <div class="city-details">
+                  <div class="city-default"><b>Select a red dot.</b><br><br>No city names are shown in advance. Choose a location to reveal the historical city.</div>
+                  <article class="city-detail detail-kyoto"><span class="city-kicker">Map discovery</span><h3>Kyoto / Heian-kyo</h3><div class="city-period">Imperial capital • 794–1868</div><h4>Why it mattered</h4><p>Kyoto became the centre of the imperial court and one of Japan’s most important cultural and political cities.</p><h4>History</h4><p>The capital moved here in 794. Court culture flourished during the Heian period. Even after military governments gained power elsewhere, the emperor and imperial court remained in Kyoto until the Meiji Restoration.</p></article>
+                  <article class="city-detail detail-nara"><span class="city-kicker">Map discovery</span><h3>Nara</h3><div class="city-period">Imperial capital • 710–794</div><h4>Why it mattered</h4><p>Nara was Japan’s first permanent capital and a major centre of Buddhism and centralised imperial government.</p><h4>History</h4><p>The city was planned with strong influence from Chinese models. Major Buddhist temples connected religion with imperial authority, and Nara became important for administration, scholarship and state Buddhism.</p></article>
+                  <article class="city-detail detail-osaka"><span class="city-kicker">Map discovery</span><h3>Osaka</h3><div class="city-period">Castle town & commercial centre</div><h4>Why it mattered</h4><p>Osaka became strategically important during unification and later developed into a major centre of trade and the rice economy.</p><h4>History</h4><p>Toyotomi Hideyoshi built Osaka Castle as a major military and political base. Under Tokugawa rule, Osaka became a commercial hub where rice and other goods were exchanged on a large scale.</p></article>
+                  <article class="city-detail detail-edo"><span class="city-kicker">Map discovery</span><h3>Edo / Tokyo</h3><div class="city-period">Tokugawa government • 1603–1868</div><h4>Why it mattered</h4><p>Edo was the headquarters of the Tokugawa shogunate and grew into a huge political and urban centre.</p><h4>History</h4><p>Tokugawa Ieyasu based his government in Edo. Daimyo travelled there under alternate-attendance rules. After the Meiji Restoration, Edo was renamed Tokyo and became the imperial capital.</p></article>
+                  <article class="city-detail detail-kamakura"><span class="city-kicker">Map discovery</span><h3>Kamakura</h3><div class="city-period">First shogunate centre • from 1185</div><h4>Why it mattered</h4><p>Kamakura was the political centre of Japan’s first long-lasting warrior government.</p><h4>History</h4><p>Minamoto no Yoritomo established his military government here, away from the imperial court in Kyoto. The Kamakura bakufu used warrior officials, land stewards and military protectors to govern.</p></article>
+                  <article class="city-detail detail-nagasaki"><span class="city-kicker">Map discovery</span><h3>Nagasaki</h3><div class="city-period">Foreign-contact port • Tokugawa era</div><h4>Why it mattered</h4><p>Nagasaki was one of Japan’s most important gateways for controlled contact with foreign traders.</p><h4>History</h4><p>After the shogunate tightened overseas restrictions, limited Dutch and Chinese trade continued through Nagasaki. Dejima in Nagasaki harbour became especially important for controlled Dutch trade and the transfer of some Western knowledge.</p></article>
+                </div>
+              </div>
+            </div>
+          </div>
+          '''
+          pat=r'<div class="map-explorer[^>]*>.*?</div>\s*<div class="knowledge reveal"><h3>Know Japan before you enter the shogunate</h3>'
+          s,n=re.subn(pat,block+'\n<div class="knowledge reveal"><h3>Know Japan before you enter the shogunate</h3>',s,count=1,flags=re.S)
+          if n!=1:
+              raise SystemExit("Map block not found")
+
+          s=re.sub(r'\nconst cityData=\{.*?document\.querySelectorAll\([^\n]*city-hotspot[^\n]*\);\n','\n',s,count=1,flags=re.S)
+          s=s.replace("document.querySelectorAll('.city-hotspot').forEach(x=>x.classList.remove('active'));document.getElementById('cityDrawer').innerHTML='<b>Select a red dot on Japan.</b><br><br>The city name and description will appear here only after you click.';","")
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Commit fixed map
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Install final working inline Japan map"
+          git push
