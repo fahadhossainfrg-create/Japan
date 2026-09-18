@@ -701,3 +701,17 @@ body{
   height:auto;
   max-width:100%;
 }
+
+
+/* MAP ALWAYS VISIBLE FIX */
+.map-explorer.map-exact{
+  opacity:1!important;
+  transform:none!important;
+  visibility:visible!important;
+}
+.map-exact .map-canvas,
+.map-exact .embedded-map-svg,
+.map-exact .embedded-map-svg>svg{
+  opacity:1!important;
+  visibility:visible!important;
+}
