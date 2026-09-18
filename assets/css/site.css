@@ -656,3 +656,33 @@ body{
   border-radius:22px!important;
   padding:16px 18px!important;
 }
+
+
+/* ERA SOURCE BADGE V5 */
+#eras .era-source-note{
+  display:block!important;
+  margin-top:14px!important;
+  padding:11px 13px!important;
+  border-radius:13px!important;
+  background:linear-gradient(145deg,#0a241f,#11382f)!important;
+  border:1px solid rgba(255,209,126,.16)!important;
+  color:#e9e5dc!important;
+  font-size:.79rem!important;
+  line-height:1.45!important;
+  opacity:1!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 8px 20px rgba(0,0,0,.12)!important;
+}
+#eras .era-source-note::before{
+  content:"SOURCE";
+  display:inline-flex;
+  margin-right:9px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:rgba(255,209,126,.13);
+  border:1px solid rgba(255,209,126,.18);
+  color:#ffd98f;
+  font-size:.62rem;
+  font-weight:950;
+  letter-spacing:.10em;
+  vertical-align:1px;
+}
