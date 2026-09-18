@@ -100,10 +100,23 @@ s = re.sub(r"<script([^>]*)>([\s\S]*?)</script>\s*", pull_script, s, flags=re.I)
 
 (root / "assets/css").mkdir(parents=True, exist_ok=True)
 (root / "assets/js").mkdir(parents=True, exist_ok=True)
-css = "\n\n".join(css_parts).strip() + "\n"
-js = "\n\n".join(js_parts).strip() + "\n"
-(root / "assets/css/site.css").write_text(css, encoding="utf-8")
-(root / "assets/js/site.js").write_text(js, encoding="utf-8")
+css_path = root / "assets/css/site.css"
+js_path = root / "assets/js/site.js"
+if css_parts:
+    css = "\n\n".join(css_parts).strip() + "\n"
+    css_path.write_text(css, encoding="utf-8")
+elif css_path.exists():
+    css = css_path.read_text(encoding="utf-8")
+else:
+    css = ""
+
+if js_parts:
+    js = "\n\n".join(js_parts).strip() + "\n"
+    js_path.write_text(js, encoding="utf-8")
+elif js_path.exists():
+    js = js_path.read_text(encoding="utf-8")
+else:
+    js = ""
 
 if "assets/css/site.css" not in s:
     s = s.replace("</head>", '<link rel="stylesheet" href="assets/css/site.css">\n</head>', 1)
