@@ -222,3 +222,5 @@ if era_dir.exists():
 # rebuild trigger after stylesheet restore
 
 # final package rebuild
+
+# rebuild packages after era dark styling
