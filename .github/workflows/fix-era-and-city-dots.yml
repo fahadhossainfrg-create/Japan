@@ -31,9 +31,9 @@ jobs:
             if(a<0) throw new Error('Missing era image block: '+key);
             const b=nextKey ? eraSource.indexOf(nextKey+':{',a+1) : eraSource.length;
             const block=eraSource.slice(a,b>0?b:eraSource.length);
-            const m=block.match(/image:'(data:image\/[^']+)'/);
+            const m=block.match(new RegExp("image:([\\x60'\\\"])(data:image\\/[\\s\\S]*?)\\1"));
             if(!m) throw new Error('Embedded image not found for '+key);
-            return m[1];
+            return m[2];
           }
 
           const order=[
