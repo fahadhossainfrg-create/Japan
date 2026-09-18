@@ -20,6 +20,17 @@ jobs:
         run: |
           python -m pip install --quiet requests
           python scripts/build_project.py
+      - name: Upload downloadable packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: Japan-Shoguns-Packages
+          path: |
+            dist/Japan_Under_the_Shoguns_OFFLINE.html
+            dist/Japan_GitHub_Ready.zip
+            dist/Japan_Offline.zip
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Commit build
         run: |
           git config user.name "github-actions[bot]"
