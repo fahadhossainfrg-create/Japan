@@ -1,0 +1,108 @@
+name: Refine Japan map
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refine-map:
+    if: "!contains(github.event.head_commit.message, 'Refine interactive line map')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Replace map with clean line-map interaction
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p=Path("index.html")
+          s=p.read_text(encoding="utf-8")
+
+          css = r"""
+          <style id="map-v2-fix">
+          .map-explorer{grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);align-items:stretch}
+          .map-figure{position:relative;overflow:hidden;background:#faf8f3;border:1px solid rgba(82,63,38,.18);border-radius:24px}
+          .map-figure>img{width:100%;height:auto;display:block;object-fit:contain;background:#faf8f3}
+          .city-hotspot{position:absolute;transform:translate(-50%,-50%);width:17px;height:17px;padding:0;border:2px solid #fff;border-radius:50%;background:#b91c1c;box-shadow:0 0 0 3px rgba(185,28,28,.18),0 5px 12px rgba(0,0,0,.18);cursor:pointer;z-index:4;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+          .city-hotspot::after{content:"";position:absolute;inset:-9px;border:1px solid rgba(185,28,28,.24);border-radius:50%;animation:mapPulse 2.2s ease-out infinite}
+          .city-hotspot:hover,.city-hotspot:focus-visible,.city-hotspot.active{transform:translate(-50%,-50%) scale(1.25);background:#7f1d1d;box-shadow:0 0 0 5px rgba(185,28,28,.18),0 8px 18px rgba(0,0,0,.2);outline:none}
+          .city-hotspot span{display:none!important}
+          @keyframes mapPulse{0%{transform:scale(.7);opacity:.7}70%,100%{transform:scale(1.45);opacity:0}}
+          .map-credit{font-size:.78rem;line-height:1.45}
+          .city-chip-row{display:none!important}
+          .city-card{display:flex;flex-direction:column}
+          .city-card .map-instruction{margin:2px 0 14px;padding:10px 12px;border-radius:14px;background:#f5eee2;color:#6b5133;font-size:.92rem}
+          #cityDrawer{min-height:250px;padding:22px;border-radius:20px;background:linear-gradient(145deg,#fff,#f8f2e7);border:1px solid rgba(148,103,43,.16)}
+          .city-result .city-kicker{display:inline-block;margin-bottom:8px;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#9a3412}
+          .city-result h3{font-size:1.65rem;margin:0 0 5px;color:#2e241a}
+          .city-result .city-period{font-size:.9rem;font-weight:700;color:#785f40;margin-bottom:14px}
+          .city-result h4{font-size:.86rem;margin:14px 0 4px;text-transform:uppercase;letter-spacing:.08em;color:#9a3412}
+          .city-result p{margin:0;color:#504336;line-height:1.62}
+          @media(max-width:900px){.map-explorer{grid-template-columns:1fr}#cityDrawer{min-height:210px}.city-hotspot{width:15px;height:15px}}
+          </style>
+          """
+          if 'id="map-v2-fix"' not in s:
+              s=s.replace("</head>", css+"\n</head>", 1)
+
+          new_map = r"""
+          <div class="map-explorer reveal">
+            <div class="map-figure">
+              <img src="assets/japan_line_map.png" alt="Clean line map of Japan and surrounding coastlines" />
+              <button class="city-hotspot" style="left:43.8%;top:72.5%" data-city="kyoto" aria-label="Reveal Kyoto"></button>
+              <button class="city-hotspot" style="left:44.8%;top:76.0%" data-city="nara" aria-label="Reveal Nara"></button>
+              <button class="city-hotspot" style="left:40.9%;top:76.3%" data-city="osaka" aria-label="Reveal Osaka"></button>
+              <button class="city-hotspot" style="left:68.1%;top:68.7%" data-city="edo" aria-label="Reveal Edo or Tokyo"></button>
+              <button class="city-hotspot" style="left:65.8%;top:72.0%" data-city="kamakura" aria-label="Reveal Kamakura"></button>
+              <button class="city-hotspot" style="left:9.8%;top:88.0%" data-city="nagasaki" aria-label="Reveal Nagasaki"></button>
+              <div class="map-credit"><b>Interactive line map:</b> select a red dot to reveal the city name, historical period and significance. Map outline adapted from the geography map in the supplied Japan unit materials.</div>
+            </div>
+            <div class="card city-card">
+              <h3>Key Cities of Historical Japan</h3>
+              <div class="map-instruction">No city names are shown on the map. <b>Click a red dot</b> and identify the place through its history.</div>
+              <div class="drawer" id="cityDrawer"><b>Select a red dot.</b><br>The city name and its historical significance will appear here.</div>
+            </div>
+          </div>
+          """
+          s=re.sub(r'<div class="map-explorer reveal">.*?</div>\s*<div class="knowledge reveal"><h3>Know Japan before you enter the shogunate</h3>', new_map+'\n<div class="knowledge reveal"><h3>Know Japan before you enter the shogunate</h3>', s, count=1, flags=re.S)
+
+          new_js = r"""
+          const cityData={
+           nara:{name:'Nara',period:'Imperial capital • 710–794',significance:'Nara became Japan’s first permanent capital and an important centre of centralised government and Buddhism.',history:'The city was planned with strong Chinese influence. Major Buddhist temples linked religion with imperial authority, and Nara became a key centre for the growth of state institutions.'},
+           kyoto:{name:'Kyoto / Heian-kyo',period:'Imperial capital • 794–1868',significance:'Kyoto was the centre of the imperial court and one of the most important cultural and political cities in Japanese history.',history:'The capital moved here in 794. Even when shoguns exercised the strongest political and military power elsewhere, the emperor and imperial court remained in Kyoto for centuries.'},
+           kamakura:{name:'Kamakura',period:'First shogunate centre • from 1185',significance:'Kamakura became the political centre of Japan’s first long-lasting warrior government.',history:'Minamoto no Yoritomo based his government here, away from the imperial court in Kyoto. From Kamakura, the shogunate used warrior officials, land stewards and military protectors to govern.'},
+           edo:{name:'Edo / Tokyo',period:'Tokugawa government • 1603–1868',significance:'Edo was the headquarters of the Tokugawa shogunate and grew into one of the world’s largest cities.',history:'Tokugawa Ieyasu established his government at Edo. Daimyo travelled there under alternate-attendance rules. After the Meiji Restoration, Edo was renamed Tokyo and became the imperial capital.'},
+           osaka:{name:'Osaka',period:'Castle town & commercial centre',significance:'Osaka became a major centre of trade, especially the rice economy, and was strategically important during Japan’s unification.',history:'Toyotomi Hideyoshi built Osaka Castle as a major political and military centre. Under Tokugawa rule, Osaka developed into a leading commercial city where rice and other goods were traded.'},
+           nagasaki:{name:'Nagasaki',period:'Foreign-contact port • especially Tokugawa era',significance:'Nagasaki was one of Japan’s most important gateways for controlled contact with foreign traders.',history:'After Tokugawa restrictions on overseas contact, limited Dutch and Chinese trade continued through Nagasaki. Dejima, an artificial island in the harbour, became particularly important for controlled Dutch trade and the transfer of some Western knowledge.'}
+          };
+          function activateCity(key){
+           const c=cityData[key]; if(!c)return;
+           document.querySelectorAll('.city-hotspot').forEach(el=>el.classList.toggle('active',el.dataset.city===key));
+           const d=document.getElementById('cityDrawer');
+           d.innerHTML=`<div class="city-result"><span class="city-kicker">Map discovery</span><h3>${c.name}</h3><div class="city-period">${c.period}</div><h4>Why it mattered</h4><p>${c.significance}</p><h4>History</h4><p>${c.history}</p></div>`;
+           bump(d);
+          }
+          document.querySelectorAll('.city-hotspot').forEach(btn=>btn.addEventListener('click',()=>activateCity(btn.dataset.city)));
+          """
+          s=re.sub(r'const cityData=.*?document\.querySelectorAll\(\'\.city-hotspot,\.city-chip\'\)\.forEach\(btn=>btn\.addEventListener\(\'click\',\(\)=>activateCity\(btn\.dataset\.city\)\)\);', new_js.strip(), s, count=1, flags=re.S)
+
+          s=s.replace("document.querySelectorAll('.city-hotspot,.city-chip').forEach(x=>x.classList.remove('active'));document.getElementById('cityDrawer').innerHTML='<b>Click a city.</b> Its significance and history will appear here.';",
+                      "document.querySelectorAll('.city-hotspot').forEach(x=>x.classList.remove('active'));document.getElementById('cityDrawer').innerHTML='<b>Select a red dot.</b><br>The city name and its historical significance will appear here.';")
+
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Commit changes
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No map changes needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Refine interactive line map"
+          git push
