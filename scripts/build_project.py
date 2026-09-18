@@ -220,3 +220,5 @@ for old in [root / "assets/japan-worldatlas.jpg", root / "assets/japan_line_map.
 if era_dir.exists():
     shutil.rmtree(era_dir)
 # rebuild trigger after stylesheet restore
+
+# final package rebuild
