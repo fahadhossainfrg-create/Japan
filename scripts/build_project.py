@@ -84,6 +84,9 @@ for i, url in enumerate(remote_urls, 1):
 (root / "assets/SOURCES.md").write_text("\n".join(source_lines) + "\n", encoding="utf-8")
 
 # Split inline CSS and JS into clean GitHub-ready files.
+had_external_css = "assets/css/site.css" in s
+had_external_js = "assets/js/site.js" in s
+
 css_parts = re.findall(r"<style(?:\s[^>]*)?>([\s\S]*?)</style>", s, re.I)
 s = re.sub(r"<style(?:\s[^>]*)?>[\s\S]*?</style>\s*", "", s, flags=re.I)
 
@@ -102,21 +105,28 @@ s = re.sub(r"<script([^>]*)>([\s\S]*?)</script>\s*", pull_script, s, flags=re.I)
 (root / "assets/js").mkdir(parents=True, exist_ok=True)
 css_path = root / "assets/css/site.css"
 js_path = root / "assets/js/site.js"
-if css_parts:
-    css = "\n\n".join(css_parts).strip() + "\n"
-    css_path.write_text(css, encoding="utf-8")
-elif css_path.exists():
-    css = css_path.read_text(encoding="utf-8")
-else:
-    css = ""
 
-if js_parts:
-    js = "\n\n".join(js_parts).strip() + "\n"
-    js_path.write_text(js, encoding="utf-8")
-elif js_path.exists():
-    js = js_path.read_text(encoding="utf-8")
+existing_css = css_path.read_text(encoding="utf-8") if css_path.exists() else ""
+inline_css = "\n\n".join(css_parts).strip()
+if had_external_css and existing_css:
+    css = existing_css.rstrip() + (("\n\n" + inline_css) if inline_css else "") + "\n"
+elif inline_css:
+    css = inline_css + "\n"
 else:
-    js = ""
+    css = existing_css
+if css:
+    css_path.write_text(css, encoding="utf-8")
+
+existing_js = js_path.read_text(encoding="utf-8") if js_path.exists() else ""
+inline_js = "\n\n".join(js_parts).strip()
+if had_external_js and existing_js:
+    js = existing_js.rstrip() + (("\n\n" + inline_js) if inline_js else "") + "\n"
+elif inline_js:
+    js = inline_js + "\n"
+else:
+    js = existing_js
+if js:
+    js_path.write_text(js, encoding="utf-8")
 
 if "assets/css/site.css" not in s:
     s = s.replace("</head>", '<link rel="stylesheet" href="assets/css/site.css">\n</head>', 1)
