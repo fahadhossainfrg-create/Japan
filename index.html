@@ -227,6 +227,37 @@ h1{font-size:clamp(62px,9.6vw,138px);text-wrap:balance}h1 span{background:linear
 .era-css-only #era-nara:checked~.era-shell .tab-nara,.era-css-only #era-heian:checked~.era-shell .tab-heian,.era-css-only #era-kamakura:checked~.era-shell .tab-kamakura,.era-css-only #era-muromachi:checked~.era-shell .tab-muromachi,.era-css-only #era-sengoku:checked~.era-shell .tab-sengoku,.era-css-only #era-tokugawaEra:checked~.era-shell .tab-tokugawaEra,.era-css-only #era-meijiEra:checked~.era-shell .tab-meijiEra{background:#1f6c5b;color:#fff;border-color:#1f6c5b;box-shadow:0 8px 20px rgba(31,108,91,.24)}
 @media(max-width:900px){.era-css-only .era-panel{grid-template-columns:1fr}.era-css-only .era-image-wrap,.era-css-only .era-image-wrap img{min-height:330px}.era-css-only .era-tabbar{gap:7px}.era-css-only .era-tab-css{padding:9px 11px;font-size:.86rem}}
 </style>
+
+<style id="era-dark-panel-fix">
+.era-css-only .era-copy{
+  background:linear-gradient(145deg,#102a26 0%,#173c35 58%,#0f2421 100%) !important;
+  border:1px solid rgba(255,209,126,.20) !important;
+  color:#ffffff !important;
+  box-shadow:0 18px 42px rgba(0,0,0,.16);
+}
+.era-css-only .era-copy h3,
+.era-css-only .era-copy > p,
+.era-css-only .era-point span{color:#ffffff !important}
+.era-css-only .era-range{
+  display:inline-flex;width:max-content;padding:7px 11px;border-radius:999px;
+  background:#ffd17e !important;color:#24160e !important
+}
+.era-css-only .era-point{border-top:1px solid rgba(255,255,255,.11)}
+.era-css-only .era-point:first-child{border-top:0}
+.era-css-only .era-point i{
+  background:rgba(255,209,126,.15) !important;color:#ffd17e !important;
+  border:1px solid rgba(255,209,126,.22)
+}
+.era-css-only .evidence-note{
+  background:rgba(0,0,0,.24) !important;
+  border:1px solid rgba(255,255,255,.11) !important;
+  color:#ffffff !important
+}
+.era-css-only .evidence-note b{color:#ffd17e !important}
+.era-css-only .evidence-note p,
+.era-css-only .era-source-note{color:#f6efe4 !important}
+</style>
+
 </head>
 <body>
 <div class="progress" id="progress"></div>
