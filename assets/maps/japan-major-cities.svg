@@ -1,36 +1,127 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 798" role="img" aria-label="Relief map of Japan showing major historical city names">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 798" role="img" aria-label="Shaded relief map of Japan showing major historical city names">
   <defs>
     <linearGradient id="sea" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#4aa6d8"/><stop offset=".52" stop-color="#72c4e8"/><stop offset="1" stop-color="#a6e0f4"/>
+      <stop offset="0" stop-color="#3d9fd1"/><stop offset=".48" stop-color="#69bfe3"/><stop offset="1" stop-color="#a7ddf1"/>
     </linearGradient>
-    <radialGradient id="seaGlow" cx="55%" cy="42%" r="65%">
-      <stop offset="0" stop-color="#ffffff" stop-opacity=".24"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    <radialGradient id="seaGlow" cx="58%" cy="38%" r="72%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".28"/><stop offset=".55" stop-color="#ffffff" stop-opacity=".08"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="land" x1=".15" y1=".1" x2=".85" y2=".95">
-      <stop offset="0" stop-color="#f5e6ad"/><stop offset=".26" stop-color="#d7dea1"/><stop offset=".55" stop-color="#91c47e"/><stop offset=".82" stop-color="#4e9f61"/><stop offset="1" stop-color="#2f784a"/>
+    <linearGradient id="land" x1=".12" y1=".08" x2=".9" y2=".95">
+      <stop offset="0" stop-color="#f3e7b7"/><stop offset=".22" stop-color="#d9daa2"/><stop offset=".48" stop-color="#a6c987"/><stop offset=".72" stop-color="#67aa68"/><stop offset="1" stop-color="#397c4d"/>
     </linearGradient>
-    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#0b3850" flood-opacity=".28"/></filter>
-    <filter id="labelShadow" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="2" stdDeviation="1.4" flood-color="#ffffff" flood-opacity=".95"/></filter>
+    <linearGradient id="ridge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dadd83"/><stop offset=".48" stop-color="#76b866"/><stop offset="1" stop-color="#2e6f46"/>
+    </linearGradient>
+    <linearGradient id="highRidge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f0de88"/><stop offset=".4" stop-color="#94b966"/><stop offset=".72" stop-color="#4a8851"/><stop offset="1" stop-color="#275f3d"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#08354d" flood-opacity=".32"/></filter>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5"/></filter>
+    <filter id="labelShadow" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#ffffff" flood-opacity=".98"/></filter>
+
     <path id="kyushu" d="M 143 638 L 132 642 L 127 654 L 118 656 L 115 653 L 116 656 L 107 661 L 100 658 L 97 669 L 93 666 L 86 666 L 85 669 L 88 672 L 93 672 L 95 676 L 103 678 L 104 685 L 98 689 L 93 687 L 90 679 L 88 680 L 88 684 L 99 693 L 110 688 L 109 685 L 113 683 L 110 676 L 119 669 L 130 677 L 130 681 L 139 690 L 139 694 L 135 696 L 141 698 L 132 715 L 118 726 L 117 737 L 124 743 L 124 752 L 118 757 L 119 760 L 130 760 L 136 763 L 131 758 L 131 749 L 135 745 L 135 741 L 143 737 L 151 742 L 145 750 L 150 757 L 146 768 L 155 766 L 160 760 L 157 754 L 161 751 L 175 752 L 180 743 L 180 727 L 193 704 L 191 702 L 208 686 L 198 674 L 199 671 L 188 671 L 182 666 L 184 662 L 189 662 L 195 657 L 192 651 L 181 655 L 166 654 L 157 648 L 153 640 Z"/>
     <path id="shikoku" d="M 347 625 L 346 624 L 342 625 L 329 619 L 317 617 L 312 620 L 302 623 L 301 631 L 295 636 L 291 637 L 280 636 L 276 638 L 270 638 L 262 631 L 256 634 L 250 640 L 250 646 L 246 650 L 240 652 L 233 657 L 235 659 L 235 664 L 239 664 L 242 669 L 239 679 L 242 682 L 249 683 L 251 686 L 250 688 L 252 690 L 260 689 L 262 685 L 262 681 L 265 677 L 268 677 L 275 670 L 275 665 L 279 660 L 297 653 L 306 653 L 313 655 L 320 659 L 324 664 L 326 664 L 329 657 L 339 648 L 351 642 L 349 640 L 351 636 L 348 635 L 346 632 Z"/>
     <path id="honshu" d="M 709 267 L 688 260 L 681 274 L 705 272 L 697 293 L 685 287 L 672 294 L 666 275 L 656 274 L 654 293 L 633 304 L 639 326 L 624 340 L 636 341 L 642 355 L 605 434 L 576 449 L 554 475 L 489 502 L 466 480 L 491 464 L 467 470 L 465 498 L 425 538 L 429 555 L 409 563 L 380 561 L 382 551 L 284 566 L 257 562 L 203 602 L 156 618 L 155 630 L 200 628 L 215 636 L 229 614 L 246 621 L 354 593 L 396 603 L 379 620 L 377 636 L 394 652 L 414 655 L 440 622 L 468 617 L 449 604 L 459 582 L 496 594 L 492 601 L 537 601 L 571 577 L 579 582 L 576 601 L 592 571 L 615 569 L 630 550 L 645 558 L 630 570 L 630 587 L 654 575 L 657 560 L 678 549 L 663 523 L 688 481 L 682 431 L 690 418 L 713 415 L 711 404 L 742 359 L 730 323 L 709 302 Z"/>
     <path id="hokkaido" d="M 917 109 L 898 126 L 886 130 L 853 124 L 851 118 L 836 120 L 780 84 L 739 42 L 726 48 L 722 57 L 734 92 L 726 107 L 725 129 L 709 139 L 714 162 L 701 172 L 657 162 L 666 179 L 654 191 L 630 198 L 627 215 L 646 232 L 646 240 L 637 253 L 646 260 L 655 255 L 657 247 L 671 239 L 687 244 L 694 241 L 675 228 L 664 228 L 648 218 L 653 204 L 665 197 L 674 198 L 688 213 L 710 198 L 735 197 L 807 230 L 815 205 L 842 183 L 859 176 L 884 179 L 894 171 L 903 175 L 909 168 L 928 165 L 912 160 L 913 153 L 902 135 Z"/>
+
     <clipPath id="clipKyushu"><use href="#kyushu"/></clipPath><clipPath id="clipShikoku"><use href="#shikoku"/></clipPath><clipPath id="clipHonshu"><use href="#honshu"/></clipPath><clipPath id="clipHokkaido"><use href="#hokkaido"/></clipPath>
   </defs>
-  <rect width="1000" height="798" fill="url(#sea)"/><rect width="1000" height="798" fill="url(#seaGlow)"/>
-  <g opacity=".14" stroke="#ffffff" stroke-width="1" fill="none"><path d="M0 175 C180 125 340 200 520 150 S820 80 1000 135"/><path d="M0 330 C170 295 330 350 520 305 S820 260 1000 315"/><path d="M0 520 C180 470 330 535 515 495 S805 450 1000 505"/></g>
-  <g fill="url(#land)" stroke="#e9f7d8" stroke-width="7" stroke-linejoin="round" filter="url(#shadow)"><use href="#kyushu"/><use href="#shikoku"/><use href="#honshu"/><use href="#hokkaido"/></g>
-  <g fill="none" stroke="#1f6b43" stroke-width="3" stroke-linejoin="round"><use href="#kyushu"/><use href="#shikoku"/><use href="#honshu"/><use href="#hokkaido"/></g>
+
+  <rect width="1000" height="798" fill="url(#sea)"/>
+  <rect width="1000" height="798" fill="url(#seaGlow)"/>
+
+  <g opacity=".12" fill="none" stroke="#ffffff" stroke-width="1.2">
+    <path d="M0 160 C180 120 340 190 520 145 S820 72 1000 128"/>
+    <path d="M0 312 C170 278 335 338 520 294 S815 247 1000 301"/>
+    <path d="M0 505 C185 455 345 525 520 486 S825 440 1000 495"/>
+    <path d="M0 660 C180 615 365 667 555 632 S835 601 1000 650"/>
+  </g>
+
+  <g fill="url(#land)" stroke="#f0f7d4" stroke-width="8" stroke-linejoin="round" filter="url(#shadow)">
+    <use href="#kyushu"/><use href="#shikoku"/><use href="#honshu"/><use href="#hokkaido"/>
+  </g>
+  <g fill="none" stroke="#1d6842" stroke-width="3.2" stroke-linejoin="round">
+    <use href="#kyushu"/><use href="#shikoku"/><use href="#honshu"/><use href="#hokkaido"/>
+  </g>
+
+  <!-- Lowland plains -->
+  <g opacity=".52" fill="#ece7b7">
+    <ellipse cx="645" cy="548" rx="43" ry="20" transform="rotate(-20 645 548)" clip-path="url(#clipHonshu)"/>
+    <ellipse cx="433" cy="588" rx="51" ry="22" transform="rotate(-8 433 588)" clip-path="url(#clipHonshu)"/>
+    <ellipse cx="556" cy="486" rx="38" ry="16" transform="rotate(-15 556 486)" clip-path="url(#clipHonshu)"/>
+    <ellipse cx="689" cy="343" rx="28" ry="15" transform="rotate(-40 689 343)" clip-path="url(#clipHonshu)"/>
+    <ellipse cx="162" cy="691" rx="31" ry="16" transform="rotate(30 162 691)" clip-path="url(#clipKyushu)"/>
+  </g>
+
+  <!-- Hokkaido relief -->
   <g clip-path="url(#clipHokkaido)" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M745 76 C770 98 791 124 811 151 C829 172 850 184 881 177" stroke="#1d5e3b" stroke-width="32" opacity=".46"/><path d="M746 80 C770 101 792 127 813 151 C834 174 853 182 878 176" stroke="#5eaa61" stroke-width="18" opacity=".9"/><path d="M748 85 C771 105 791 129 810 150 C831 171 849 178 873 173" stroke="#d7d98a" stroke-width="5" opacity=".92"/><path d="M686 207 C712 195 739 188 769 190" stroke="#2f7a48" stroke-width="18" opacity=".65"/>
+    <path d="M744 74 C770 96 790 120 809 149 C828 176 850 188 885 178" stroke="#245f3f" stroke-width="42" opacity=".38"/>
+    <path d="M746 77 C772 100 792 124 812 150 C832 174 853 185 881 177" stroke="url(#ridge)" stroke-width="28" opacity=".88"/>
+    <path d="M750 82 C774 103 794 127 812 149 C831 170 850 179 876 174" stroke="url(#highRidge)" stroke-width="11" opacity=".95"/>
+    <path d="M683 203 C709 193 738 187 771 190" stroke="#2c7448" stroke-width="21" opacity=".55"/>
+    <path d="M690 205 C713 197 739 193 766 195" stroke="#82b96a" stroke-width="10" opacity=".86"/>
+    <path d="M796 107 C806 125 820 140 839 150" stroke="#f2e39a" stroke-width="4" opacity=".75"/>
   </g>
+
+  <!-- Honshu mountain spine -->
   <g clip-path="url(#clipHonshu)" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M694 297 C675 328 658 358 646 391 C634 423 622 451 604 476 C585 500 566 520 545 538 C524 557 503 570 476 578 C451 586 425 587 400 584" stroke="#1b603c" stroke-width="34" opacity=".52"/><path d="M695 300 C677 330 660 359 648 391 C636 423 624 450 607 474 C589 498 570 518 548 537 C527 555 505 568 478 576 C453 584 429 584 405 580" stroke="#4b9c59" stroke-width="20" opacity=".92"/><path d="M693 303 C677 332 661 359 650 389 C638 420 626 447 610 470 C593 493 575 512 554 530 C532 548 509 562 483 570 C458 578 436 578 415 575" stroke="#d3d47d" stroke-width="6" opacity=".95"/><path d="M594 471 C570 475 549 470 529 455 C508 441 493 421 486 398" stroke="#236f43" stroke-width="18" opacity=".62"/><path d="M461 504 C450 525 444 544 446 562" stroke="#236f43" stroke-width="15" opacity=".62"/><path d="M395 576 C365 578 336 585 309 596 C284 607 261 617 236 620" stroke="#377f4b" stroke-width="14" opacity=".55"/>
+    <path d="M699 296 C683 326 667 356 655 389 C643 420 633 450 615 476 C596 502 577 521 555 539 C533 559 508 572 482 580 C455 589 430 589 405 583" stroke="#1e6040" stroke-width="46" opacity=".38"/>
+    <path d="M698 298 C681 329 665 359 653 390 C641 422 630 451 613 475 C595 500 576 519 553 538 C531 556 507 569 480 578 C454 586 431 587 408 581" stroke="url(#ridge)" stroke-width="32" opacity=".92"/>
+    <path d="M695 302 C680 331 665 359 655 388 C643 418 631 445 616 468 C599 493 580 511 558 530 C537 548 514 562 487 570 C462 578 440 579 419 575" stroke="url(#highRidge)" stroke-width="14" opacity=".97"/>
+    <path d="M693 305 C679 333 665 359 656 385 C645 414 634 439 619 462 C604 485 586 503 564 522" stroke="#f2df8b" stroke-width="5" opacity=".8"/>
+
+    <!-- Secondary ranges -->
+    <path d="M607 436 C584 441 563 437 542 422 C521 407 505 386 498 364" stroke="#2b7045" stroke-width="24" opacity=".55"/>
+    <path d="M604 438 C584 443 565 440 546 426 C526 412 511 394 504 375" stroke="#72ad61" stroke-width="11" opacity=".9"/>
+    <path d="M466 500 C455 522 450 543 451 564" stroke="#286d43" stroke-width="20" opacity=".57"/>
+    <path d="M468 505 C459 525 455 542 457 559" stroke="#7bb269" stroke-width="9" opacity=".88"/>
+    <path d="M399 575 C369 578 339 585 312 596 C286 607 262 617 237 620" stroke="#357c49" stroke-width="20" opacity=".55"/>
+    <path d="M400 577 C371 581 344 587 318 597 C291 607 269 615 245 618" stroke="#88bb70" stroke-width="8" opacity=".86"/>
+
+    <!-- Japanese Alps mass -->
+    <path d="M500 522 C519 506 538 496 555 483 C570 472 584 456 593 438" stroke="#285f3f" stroke-width="38" opacity=".28"/>
+    <path d="M504 521 C522 506 539 496 555 484 C569 474 580 460 588 446" stroke="#5c9657" stroke-width="22" opacity=".72"/>
+    <path d="M510 518 C527 505 542 496 557 485 C569 476 578 464 584 453" stroke="#d9d27c" stroke-width="8" opacity=".85"/>
   </g>
-  <g clip-path="url(#clipShikoku)" fill="none" stroke-linecap="round"><path d="M250 651 C276 643 303 638 335 637" stroke="#236f43" stroke-width="18" opacity=".58"/><path d="M254 650 C279 643 304 639 331 639" stroke="#79b868" stroke-width="9" opacity=".9"/></g>
-  <g clip-path="url(#clipKyushu)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M183 650 C171 663 163 678 155 697 C148 716 140 733 128 749" stroke="#1d633d" stroke-width="24" opacity=".5"/><path d="M184 652 C172 665 164 681 157 698 C150 716 142 730 132 744" stroke="#5aa55e" stroke-width="13" opacity=".9"/><path d="M184 656 C173 668 166 682 160 698 C153 714 146 727 137 739" stroke="#d6d984" stroke-width="4" opacity=".95"/></g>
-  <g fill="none" stroke="#f8f3c9" stroke-width="1.4" opacity=".35"><path d="M652 325 C671 350 668 376 654 400"/><path d="M612 418 C624 441 621 462 607 482"/><path d="M568 500 C578 519 573 535 560 549"/><path d="M503 545 C511 558 506 569 493 577"/><path d="M176 670 C184 686 182 701 174 713"/></g>
+
+  <!-- Shikoku relief -->
+  <g clip-path="url(#clipShikoku)" fill="none" stroke-linecap="round">
+    <path d="M250 651 C276 643 304 637 337 637" stroke="#246b43" stroke-width="22" opacity=".52"/>
+    <path d="M254 650 C279 643 304 639 332 639" stroke="#78b367" stroke-width="11" opacity=".9"/>
+    <path d="M264 648 C286 643 305 641 325 641" stroke="#d6d483" stroke-width="4" opacity=".84"/>
+  </g>
+
+  <!-- Kyushu relief -->
+  <g clip-path="url(#clipKyushu)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M184 648 C171 663 162 681 154 700 C147 718 138 735 125 750" stroke="#205f3e" stroke-width="32" opacity=".42"/>
+    <path d="M184 651 C172 665 164 681 157 699 C150 716 142 731 131 746" stroke="#5ca45d" stroke-width="18" opacity=".9"/>
+    <path d="M185 655 C174 668 167 683 160 699 C153 715 146 728 137 740" stroke="#d7d982" stroke-width="6" opacity=".92"/>
+    <path d="M116 682 C132 678 147 682 159 690" stroke="#397d49" stroke-width="12" opacity=".58"/>
+  </g>
+
+  <!-- Fine contour cues -->
+  <g fill="none" stroke="#fff7c5" stroke-width="1.2" opacity=".35">
+    <path d="M650 324 C668 347 668 373 655 398"/>
+    <path d="M616 412 C629 438 625 460 611 481"/>
+    <path d="M573 493 C585 515 579 535 565 549"/>
+    <path d="M510 540 C519 556 514 569 500 578"/>
+    <path d="M177 670 C187 687 184 703 175 715"/>
+    <path d="M777 95 C790 112 805 128 824 140"/>
+  </g>
+
+  <!-- Mt Fuji visual cue, no extra text -->
+  <g transform="translate(585 510)" opacity=".96">
+    <path d="M0 24 L19 -10 L40 24 Z" fill="#2e6a46" stroke="#f4f0cf" stroke-width="2"/>
+    <path d="M14 0 L19 -10 L25 0 L22 2 L19 -1 L16 2 Z" fill="#f5f1df"/>
+  </g>
+
+  <!-- City names only -->
   <g font-family="Inter, Arial, Helvetica, sans-serif" font-weight="900" font-size="29" fill="#111827" filter="url(#labelShadow)">
-    <text x="62" y="690">Nagasaki</text><text x="300" y="635">Osaka</text><text x="355" y="575">Kyoto</text><text x="435" y="620">Nara</text><text x="545" y="585">Kamakura</text><text x="650" y="520">Edo / Tokyo</text>
+    <text x="61" y="690">Nagasaki</text>
+    <text x="298" y="637">Osaka</text>
+    <text x="355" y="575">Kyoto</text>
+    <text x="433" y="620">Nara</text>
+    <text x="548" y="586">Kamakura</text>
+    <text x="648" y="520">Edo / Tokyo</text>
   </g>
 </svg>
