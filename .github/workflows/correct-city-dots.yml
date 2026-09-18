@@ -1,0 +1,56 @@
+name: Correct historical city dot positions
+
+on:
+  push:
+    paths:
+      - ".github/workflows/correct-city-dots.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Correct city coordinates
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path("index.html")
+          s=p.read_text(encoding="utf-8")
+
+          replacements={
+            'for="map-city-kyoto" style="left:37.7%;top:76.6%"':'for="map-city-kyoto" style="left:44.8%;top:72.2%"',
+            'for="map-city-nara" style="left:38.6%;top:78.8%"':'for="map-city-nara" style="left:45.4%;top:74.9%"',
+            'for="map-city-osaka" style="left:36.1%;top:79.2%"':'for="map-city-osaka" style="left:43.0%;top:73.9%"',
+            'for="map-city-edo" style="left:63.8%;top:71.2%"':'for="map-city-edo" style="left:65.5%;top:67.7%"',
+            'for="map-city-kamakura" style="left:62.5%;top:73.4%"':'for="map-city-kamakura" style="left:64.7%;top:69.2%"',
+            'for="map-city-nagasaki" style="left:10.5%;top:88.2%"':'for="map-city-nagasaki" style="left:17.0%;top:90.2%"'
+          }
+
+          changed=0
+          for old,new in replacements.items():
+            if old in s:
+              s=s.replace(old,new,1)
+              changed+=1
+
+          s=s.replace(
+            'click a red dot placed directly on the geographic outline of Japan. The city name appears only after selection.',
+            'click a red dot placed directly on the actual city location on the map. The city name appears only after selection.'
+          )
+
+          if changed != 6:
+            raise SystemExit(f"Expected 6 coordinate updates, got {changed}")
+
+          p.write_text(s,encoding="utf-8")
+          PY
+
+      - name: Commit city positions
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Correct historical city dot positions"
+          git push
