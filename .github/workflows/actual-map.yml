@@ -1,0 +1,103 @@
+name: Use actual interactive Japan map
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-map:
+    if: "!contains(github.event.head_commit.message, 'Use actual interactive Japan map')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Replace map with actual geographic map
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path("index.html")
+          s=p.read_text(encoding="utf-8")
+
+          css = r"""
+          <style id="actual-map-v3">
+          .map-explorer.actual-map{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(310px,.6fr);gap:22px;align-items:stretch}
+          .actual-map .map-figure{position:relative;overflow:hidden;background:#78b9e5;border:1px solid rgba(19,64,98,.2);border-radius:24px;box-shadow:0 18px 42px rgba(31,41,55,.12)}
+          .actual-map .map-figure>img{width:100%;height:auto;display:block;object-fit:contain;background:#78b9e5}
+          .actual-map .city-hotspot{position:absolute;width:22px;height:22px;padding:0;border:0;background:transparent;transform:translate(-50%,-50%);cursor:pointer;z-index:5}
+          .actual-map .city-hotspot::before{content:'';position:absolute;left:50%;top:50%;width:10px;height:10px;transform:translate(-50%,-50%);border-radius:50%;background:#d71920;border:2px solid #fff;box-shadow:0 0 0 2px rgba(94,20,20,.28),0 4px 10px rgba(0,0,0,.3)}
+          .actual-map .city-hotspot::after{content:'';position:absolute;left:50%;top:50%;width:18px;height:18px;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(215,25,32,.45);opacity:0;transition:.18s ease}
+          .actual-map .city-hotspot:hover::after,.actual-map .city-hotspot:focus-visible::after,.actual-map .city-hotspot.active::after{opacity:1;width:26px;height:26px}
+          .actual-map .city-hotspot:hover::before,.actual-map .city-hotspot.active::before{background:#7f1d1d;transform:translate(-50%,-50%) scale(1.18)}
+          .actual-map .city-hotspot:focus-visible{outline:none}
+          .actual-map .city-card{display:flex;flex-direction:column;justify-content:flex-start}
+          .actual-map .map-instruction{margin:0 0 14px;padding:11px 13px;border-radius:14px;background:#f6efe4;color:#63492d;line-height:1.5}
+          .actual-map #cityDrawer{min-height:270px;padding:22px;border-radius:20px;background:linear-gradient(145deg,#fff,#f7f1e6);border:1px solid rgba(148,103,43,.18)}
+          .actual-map .map-credit{font-size:.78rem;line-height:1.45;color:#334155;background:rgba(255,255,255,.94)}
+          .city-result .city-kicker{display:inline-block;margin-bottom:8px;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#9a3412}
+          .city-result h3{font-size:1.65rem;margin:0 0 5px;color:#2e241a}
+          .city-result .city-period{font-size:.9rem;font-weight:700;color:#785f40;margin-bottom:14px}
+          .city-result h4{font-size:.84rem;margin:14px 0 4px;text-transform:uppercase;letter-spacing:.08em;color:#9a3412}
+          .city-result p{margin:0;color:#504336;line-height:1.62}
+          @media(max-width:900px){.map-explorer.actual-map{grid-template-columns:1fr}.actual-map #cityDrawer{min-height:220px}.actual-map .city-hotspot{width:24px;height:24px}.actual-map .city-hotspot::before{width:9px;height:9px}}
+          </style>
+          """
+          if 'id="actual-map-v3"' not in s:
+              s=s.replace("</head>", css+"\n</head>", 1)
+
+          map_html = r"""
+          <div class="map-explorer actual-map reveal">
+            <div class="map-figure">
+              <img src="https://www.d-maps.com/m/asia/japan/japon/japon66.gif" alt="Geographical map of Japan and neighbouring coastlines" />
+              <button class="city-hotspot" style="left:43.1%;top:67.0%" data-city="kyoto" aria-label="Reveal Kyoto"></button>
+              <button class="city-hotspot" style="left:44.0%;top:69.3%" data-city="nara" aria-label="Reveal Nara"></button>
+              <button class="city-hotspot" style="left:41.7%;top:69.2%" data-city="osaka" aria-label="Reveal Osaka"></button>
+              <button class="city-hotspot" style="left:62.1%;top:63.0%" data-city="edo" aria-label="Reveal Edo or Tokyo"></button>
+              <button class="city-hotspot" style="left:61.5%;top:65.0%" data-city="kamakura" aria-label="Reveal Kamakura"></button>
+              <button class="city-hotspot" style="left:8.1%;top:81.5%" data-city="nagasaki" aria-label="Reveal Nagasaki"></button>
+              <div class="map-credit"><b>Interactive historical geography:</b> the red dots are positioned directly on the geographic map. Click a dot to reveal the city name and history. Map source acknowledged: d-maps.com.</div>
+            </div>
+            <div class="card city-card">
+              <h3>Key Cities of Historical Japan</h3>
+              <div class="map-instruction"><b>Explore without labels:</b> select any red dot on the map. The city name, time period, significance and history will appear here.</div>
+              <div class="drawer" id="cityDrawer"><b>Select a red dot on Japan.</b><br><br>The city name and description will appear here only after you click.</div>
+            </div>
+          </div>
+          """
+          pat=r'<div class="map-explorer(?: actual-map)? reveal">.*?</div>\s*<div class="knowledge reveal"><h3>Know Japan before you enter the shogunate</h3>'
+          s,n=re.subn(pat,map_html+'\n<div class="knowledge reveal"><h3>Know Japan before you enter the shogunate</h3>',s,count=1,flags=re.S)
+          if n!=1:
+              raise SystemExit("Could not locate the current map block")
+
+          city_js=r"""const cityData={
+           nara:{name:'Nara',period:'Imperial capital • 710–794',significance:'Nara was Japan’s first permanent capital and a major centre of Buddhism and centralised imperial government.',history:'The city was planned with strong influence from Chinese models. Major Buddhist temples helped connect religion with imperial authority, and Nara became an important centre for administration, scholarship and state Buddhism.'},
+           kyoto:{name:'Kyoto / Heian-kyo',period:'Imperial capital • 794–1868',significance:'Kyoto became the centre of the imperial court and remained one of Japan’s most important cultural and political cities for more than a thousand years.',history:'The capital moved here in 794. Court culture flourished during the Heian period. Even after military governments gained political power, the emperor and imperial court remained in Kyoto until the Meiji Restoration.'},
+           kamakura:{name:'Kamakura',period:'First shogunate centre • from 1185',significance:'Kamakura was the political centre of Japan’s first long-lasting warrior government.',history:'Minamoto no Yoritomo established his military government here, away from the imperial court in Kyoto. The Kamakura bakufu used warrior officials, land stewards and military protectors to govern.'},
+           edo:{name:'Edo / Tokyo',period:'Tokugawa government • 1603–1868',significance:'Edo was the headquarters of the Tokugawa shogunate and grew into a huge political and urban centre.',history:'Tokugawa Ieyasu based his government in Edo. Daimyo travelled to the city under alternate-attendance rules. After the Meiji Restoration, Edo was renamed Tokyo and became the imperial capital.'},
+           osaka:{name:'Osaka',period:'Castle town & commercial centre',significance:'Osaka became strategically important during unification and later developed into a major centre of trade and the rice economy.',history:'Toyotomi Hideyoshi built Osaka Castle as a major military and political base. Under Tokugawa rule, Osaka became a commercial hub where rice and other goods were exchanged on a large scale.'},
+           nagasaki:{name:'Nagasaki',period:'Foreign-contact port • Tokugawa era',significance:'Nagasaki was one of Japan’s most important gateways for controlled contact with foreign traders.',history:'After the shogunate tightened overseas restrictions, limited Dutch and Chinese trade continued through Nagasaki. Dejima in Nagasaki harbour became especially important for controlled Dutch trade and the transfer of some Western knowledge.'}
+          };
+          function activateCity(key){const c=cityData[key];if(!c)return;document.querySelectorAll('.city-hotspot').forEach(el=>el.classList.toggle('active',el.dataset.city===key));const d=document.getElementById('cityDrawer');d.innerHTML=`<div class="city-result"><span class="city-kicker">Map discovery</span><h3>${c.name}</h3><div class="city-period">${c.period}</div><h4>Why it mattered</h4><p>${c.significance}</p><h4>History</h4><p>${c.history}</p></div>`;bump(d)}
+          document.querySelectorAll('.city-hotspot').forEach(btn=>btn.addEventListener('click',()=>activateCity(btn.dataset.city)));"""
+          s,n=re.subn(r"const cityData=\{.*?document\.querySelectorAll\('\.city-hotspot'\)\.forEach\(btn=>btn\.addEventListener\('click',\(\)=>activateCity\(btn\.dataset\.city\)\)\);",city_js,s,count=1,flags=re.S)
+          if n!=1:
+              raise SystemExit("Could not locate city interaction code")
+
+          s=s.replace("document.getElementById('cityDrawer').innerHTML='<b>Select a red dot.</b><br>The city name and its historical significance will appear here.';",
+                      "document.getElementById('cityDrawer').innerHTML='<b>Select a red dot on Japan.</b><br><br>The city name and description will appear here only after you click.';")
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Commit actual map
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No change needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Use actual interactive Japan map"
+          git push
