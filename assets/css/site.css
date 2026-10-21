@@ -48,6 +48,10 @@ body::before{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;
 .hud::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(110deg,rgba(255,255,255,.3),transparent 30%,rgba(237,189,98,.25));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
 .hud .brand{max-width:210px;overflow:hidden;text-overflow:ellipsis}.hud .chapter-pill{border-radius:999px;padding:8px 11px;background:rgba(237,189,98,.14);color:#ffe3a9;font-size:11px;font-weight:900;white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis;border:1px solid rgba(237,189,98,.18)}
 .hud .pill{background:linear-gradient(135deg,rgba(199,53,45,.28),rgba(237,189,98,.13));border:1px solid rgba(255,255,255,.08)}
+.hud .chapter-select-wrap{display:flex;align-items:center;gap:6px;flex:0 0 auto;padding:4px 5px 4px 9px;border-radius:999px;background:rgba(255,255,255,.085);border:1px solid rgba(255,255,255,.13)}
+.hud .chapter-select-wrap>span{font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;color:#ffe3a9;white-space:nowrap}
+.hud #chapterSelect{max-width:210px;min-width:155px;border:0;outline:0;border-radius:999px;padding:5px 28px 5px 9px;background:rgba(255,255,255,.1);color:#fff;font:800 11px/1.2 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
+.hud #chapterSelect option{color:#15100e;background:#fff7e7}
 .hud .hud-guide{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;min-width:max-content;padding:8px 11px;border-radius:999px;background:linear-gradient(135deg,rgba(237,189,98,.2),rgba(199,53,45,.2));border:1px solid rgba(237,189,98,.32);color:#fff;text-decoration:none;font-size:12px;font-weight:900;line-height:1;white-space:nowrap}
 .hud .hud-guide:hover{background:rgba(237,189,98,.28);transform:translateY(-1px)}
 .hud button{transition:transform .18s var(--ease),background .18s ease}.hud button:hover{transform:translateY(-1px)}
@@ -88,8 +92,8 @@ h1{font-size:clamp(62px,9.6vw,138px);text-wrap:balance}h1 span{background:linear
 @keyframes chipIn{from{opacity:0;transform:translateY(5px) scale(.96)}to{opacity:1;transform:none}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes chapterGlow{0%{box-shadow:inset 0 0 0 transparent}40%{box-shadow:inset 0 0 120px rgba(237,189,98,.05)}100%{box-shadow:inset 0 0 0 transparent}}
-@media(max-width:900px){.hud .chapter-pill{display:none}.chapter{padding-top:108px;padding-bottom:100px}.chapter::before{top:70px;font-size:34vw}.photo:hover{transform:none}.photo:hover img{transform:none}.side-nav{display:none}}
-@media(max-width:680px){.hud{max-width:calc(100vw - 16px);width:auto;overflow:visible}.hud .pill{font-size:11px}.hud .hud-guide{padding:8px 10px;font-size:11px}.hud button{padding:8px 9px}.hero-content{padding:0 5vw 11vh}.scroll-cue{display:none}.chapter{padding-top:92px;padding-bottom:82px}.photo{border-radius:22px}.fact-popover{right:16px;bottom:16px}.option:hover:not(:disabled){transform:none}}
+@media(max-width:900px){.hud .chapter-pill{display:none}.hud .chapter-select-wrap>span{display:none}.hud #chapterSelect{max-width:190px;min-width:145px}.chapter{padding-top:108px;padding-bottom:100px}.chapter::before{top:70px;font-size:34vw}.photo:hover{transform:none}.photo:hover img{transform:none}.side-nav{display:none}}
+@media(max-width:680px){.hud{max-width:calc(100vw - 16px);width:auto;overflow:visible}.hud .pill{font-size:11px}.hud .chapter-select-wrap{padding:3px}.hud #chapterSelect{max-width:154px;min-width:125px;font-size:10.5px}.hud .hud-guide{padding:8px 10px;font-size:11px}.hud button{padding:8px 9px}.hero-content{padding:0 5vw 11vh}.scroll-cue{display:none}.chapter{padding-top:92px;padding-bottom:82px}.photo{border-radius:22px}.fact-popover{right:16px;bottom:16px}.option:hover:not(:disabled){transform:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal,.hero-content>*,.photo img,.flash .inner,.option,.photo-tile,.side-nav a{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none;filter:none}.hero-bg{transform:none!important}}
 
 
