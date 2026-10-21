@@ -4,14 +4,28 @@ const heroBg=document.querySelector('.hero-bg');
 const chapters=[...document.querySelectorAll('.chapter')];
 const navLinks=[...document.querySelectorAll('.side-nav a')];
 const chapterPill=document.getElementById('chapterPill');
+const chapterSelect=document.getElementById('chapterSelect');
 chapters.forEach((c,i)=>{c.dataset.index=String(i+1).padStart(2,'0')});
 navLinks.forEach(a=>{a.dataset.label=a.title||'Chapter'});
+if(chapterSelect){
+ navLinks.forEach((a,i)=>{
+  const opt=document.createElement('option');
+  opt.value=a.getAttribute('href').replace('#','');
+  opt.textContent=(i<13?String(i+1).padStart(2,'0')+' · ':'')+(a.title||'Section');
+  chapterSelect.appendChild(opt)
+ });
+ chapterSelect.addEventListener('change',()=>{
+  if(!chapterSelect.value)return;
+  const target=document.getElementById(chapterSelect.value);
+  if(target)target.scrollIntoView({behavior:'smooth',block:'start'})
+ })
+}
 document.querySelectorAll('.chapter').forEach(ch=>{[...ch.querySelectorAll('.reveal')].forEach((el,i)=>el.style.setProperty('--delay',Math.min(i%5,4)*70+'ms'))});
 let ticking=false;
 function onScroll(){if(ticking)return;ticking=true;requestAnimationFrame(()=>{const h=document.documentElement.scrollHeight-innerHeight;progress.style.width=(h?scrollY/h*100:0)+'%';if(heroBg&&scrollY<innerHeight*1.25)heroBg.style.transform=`scale(1.06) translate3d(0,${scrollY*.12}px,0)`;ticking=false})}
 window.addEventListener('scroll',onScroll,{passive:true});onScroll();
 if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')}),{threshold:.05});document.querySelectorAll('.reveal').forEach(x=>io.observe(x));}else{document.querySelectorAll('.reveal').forEach(x=>x.classList.add('on'));}
-const chapterIO=new IntersectionObserver(entries=>entries.forEach(e=>{if(!e.isIntersecting)return;chapters.forEach(c=>c.classList.remove('active-chapter'));e.target.classList.add('active-chapter','chapter-enter');setTimeout(()=>e.target.classList.remove('chapter-enter'),850);const id=e.target.id;const link=navLinks.find(a=>a.getAttribute('href')==='#'+id);navLinks.forEach(a=>a.classList.toggle('active',a===link));const k=e.target.querySelector('.kicker');chapterPill.textContent=k?k.textContent.replace(/•/g,'·'):'Japan Under the Shoguns'}), {rootMargin:'-42% 0px -48% 0px',threshold:0});chapters.forEach(c=>chapterIO.observe(c));
+const chapterIO=new IntersectionObserver(entries=>entries.forEach(e=>{if(!e.isIntersecting)return;chapters.forEach(c=>c.classList.remove('active-chapter'));e.target.classList.add('active-chapter','chapter-enter');setTimeout(()=>e.target.classList.remove('chapter-enter'),850);const id=e.target.id;const link=navLinks.find(a=>a.getAttribute('href')==='#'+id);navLinks.forEach(a=>a.classList.toggle('active',a===link));if(chapterSelect)chapterSelect.value=id;const k=e.target.querySelector('.kicker');chapterPill.textContent=k?k.textContent.replace(/•/g,'·'):'Japan Under the Shoguns'}), {rootMargin:'-42% 0px -48% 0px',threshold:0});chapters.forEach(c=>chapterIO.observe(c));
 // lightbox
 const lb=document.getElementById('lightbox'),lbi=document.getElementById('lightboxImg');document.querySelectorAll('img.zoom').forEach(i=>i.addEventListener('dblclick',()=>{lbi.src=i.src;lb.classList.add('open')}));function closeLightbox(){lb.classList.remove('open')}lb.addEventListener('click',e=>{if(e.target===lb)closeLightbox()});
 
