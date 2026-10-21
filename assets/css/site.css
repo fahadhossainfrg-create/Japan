@@ -715,3 +715,49 @@ body{
   opacity:1!important;
   visibility:visible!important;
 }
+
+
+/* ===== Written practice + NESA answer guide ===== */
+.history-practice{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:16px;align-items:stretch;margin-top:32px}
+.history-question,.model-answer,.peal-answer{border-radius:20px;padding:20px;border:1px solid rgba(75,48,32,.14);background:rgba(255,255,255,.76)}
+.dark .history-question,.dark .model-answer,.dark .peal-answer,
+.blue .history-question,.blue .model-answer,.blue .peal-answer,
+.red .history-question,.red .model-answer,.red .peal-answer,
+.jade .history-question,.jade .model-answer,.jade .peal-answer{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
+.history-question{display:flex;flex-direction:column;justify-content:center}
+.history-question .label,.model-answer .label,.peal-answer .label{font-size:11px;font-weight:950;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.dark .history-question .label,.dark .model-answer .label,.dark .peal-answer .label,
+.blue .history-question .label,.blue .model-answer .label,.blue .peal-answer .label,
+.red .history-question .label,.red .model-answer .label,.red .peal-answer .label,
+.jade .history-question .label,.jade .model-answer .label,.jade .peal-answer .label{color:#ffd17e}
+.history-question h3{font-size:clamp(24px,3vw,34px);line-height:1.14;margin:0}
+.model-answer p{margin:0;line-height:1.68;font-size:15px}
+.peal-answer{display:grid;gap:0}
+.peal-row{display:grid;grid-template-columns:150px 1fr;gap:12px;padding:11px 0;border-top:1px solid rgba(75,48,32,.13)}
+.peal-row:first-of-type{border-top:0;padding-top:0}
+.dark .peal-row,.blue .peal-row,.red .peal-row,.jade .peal-row{border-color:rgba(255,255,255,.14)}
+.peal-row b{font-size:12px;line-height:1.35;text-transform:uppercase;letter-spacing:.06em;color:var(--red)}
+.dark .peal-row b,.blue .peal-row b,.red .peal-row b,.jade .peal-row b{color:#ffd17e}
+.peal-row span{line-height:1.6;font-size:14px}
+
+.guide-intro{max-width:980px;margin:28px 0 24px;padding:16px 18px;border-left:4px solid #ffd17e;background:rgba(255,255,255,.08);border-radius:0 14px 14px 0;line-height:1.6}
+.nesa-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:24px}
+.nesa-card{border-radius:22px;padding:21px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16)}
+.nesa-word{font-family:Georgia,"Times New Roman",serif;font-size:31px;font-weight:900;color:#ffd17e;margin-bottom:12px}
+.nesa-card>b{display:block;margin-top:12px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#ffe4af}
+.nesa-card>p{margin:5px 0 0;line-height:1.55}
+.nesa-card ol{margin:8px 0 0;padding-left:20px;line-height:1.55}
+.nesa-card li+li{margin-top:4px}
+.guide-question,.guide-answer{margin-top:15px;padding:13px 14px;border-radius:14px;background:rgba(10,18,32,.28);border:1px solid rgba(255,255,255,.12)}
+.guide-answer{background:rgba(255,255,255,.08)}
+.guide-question b,.guide-answer b{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#ffd17e;margin-bottom:5px}
+.guide-question span,.guide-answer span{display:block;line-height:1.58}
+.nesa-source{max-width:1000px;margin-top:18px;padding:15px 17px;border-radius:15px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);line-height:1.55}
+.nesa-source a{color:#ffe1a5;font-weight:900}
+#nesa .lead{max-width:980px}
+
+@media(max-width:850px){
+ .history-practice{grid-template-columns:1fr}
+ .nesa-grid{grid-template-columns:1fr}
+ .peal-row{grid-template-columns:1fr;gap:5px}
+}
