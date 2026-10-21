@@ -823,3 +823,39 @@ body{
 }
 
 @media(max-width:520px){.hud .pill#scorePill{display:none}.hud{padding-left:9px}.hud .hud-guide{font-size:10.5px}}
+
+/* Timeline builder v2 — seven-step ordering activity */
+#tokugawa .light-timeline .timeline-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+#tokugawa .light-timeline .timeline-heading h3{margin:0 0 8px}
+#tokugawa .light-timeline .timeline-heading p{margin:0;max-width:650px}
+#tokugawa .light-timeline .timeline-count{flex:none;margin-top:4px;padding:9px 13px;background:#f5e8d0;color:#3a291d;border:1px solid #ddc7a7;border-radius:999px;font-size:12px;font-weight:900;white-space:nowrap}
+#tokugawa .light-timeline .timeline-note{margin:16px 0 23px;padding:12px 15px;border-left:4px solid #b76d28;background:#fff0d7;border-radius:0 10px 10px 0;color:#3f2c21;font-size:13px;line-height:1.6}
+#tokugawa .light-timeline .timeline-label{margin:22px 0 10px;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#71462d}
+#tokugawa .light-timeline .timeline-btns{gap:9px}
+#tokugawa .light-timeline .timeline-btns button{font-size:13px;min-height:43px;line-height:1.35;text-align:left;cursor:pointer}
+#tokugawa .light-timeline .timeline-btns button.used,
+#tokugawa .light-timeline .timeline-btns button:disabled{opacity:.48;cursor:not-allowed;background:#eae2d5;color:#493729;box-shadow:none;transform:none}
+#tokugawa .light-timeline .timeline-output{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;max-width:780px;margin:10px 0 18px}
+#tokugawa .light-timeline .timeline-slot{display:flex;align-items:center;gap:14px;width:100%;min-height:48px;padding:8px 13px;border:1px solid #dfcdb4;background:#fff;color:#20150f;border-radius:12px;text-align:left;font:inherit}
+#tokugawa .light-timeline .timeline-slot.empty{border-style:dashed;background:#fffaf1;color:#8b7562}
+#tokugawa .light-timeline .timeline-slot.filled{cursor:pointer;border-color:#b38c58;box-shadow:0 2px 8px rgba(70,43,17,.05)}
+#tokugawa .light-timeline .timeline-slot.filled:hover{background:#f8e9d1;border-color:#986039;transform:none}
+#tokugawa .light-timeline .timeline-slot-num{display:grid;place-items:center;flex:none;width:29px;height:29px;border-radius:8px;background:#eee2d0;color:#51351f;font:900 12px/1 sans-serif}
+#tokugawa .light-timeline .timeline-slot.filled .timeline-slot-num{background:#37281f;color:#fff}
+#tokugawa .light-timeline .timeline-slot-label{flex:1;min-width:0;font-size:13px;font-weight:800;line-height:1.4}
+#tokugawa .light-timeline .timeline-slot:focus-visible,
+#tokugawa .light-timeline .timeline-btns button:focus-visible{outline:3px solid #b76d28;outline-offset:3px}
+#tokugawa .light-timeline .timeline-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin:17px 0 12px}
+#tokugawa .light-timeline .timeline-actions button:disabled{opacity:.5;cursor:not-allowed}
+#tokugawa .light-timeline .timeline-feedback{padding:13px 15px;border-radius:11px;background:#f1e6d6;border:1px solid #dfcdb4;color:#473425;min-height:46px;font-size:13px;line-height:1.5}
+#tokugawa .light-timeline .timeline-feedback[data-state="success"]{background:#e4f4e9;border-color:#87c69c;color:#205532}
+#tokugawa .light-timeline .timeline-feedback[data-state="error"]{background:#ffede8;border-color:#e5a797;color:#893b2f}
+#tokugawa .light-timeline .timeline-feedback[data-state="info"]{background:#f4ecda;border-color:#d7bb84;color:#5c421a}
+@media(max-width:620px){
+ #tokugawa .light-timeline .timeline-heading{flex-direction:column;gap:11px}
+ #tokugawa .light-timeline .timeline-count{margin-top:0}
+ #tokugawa .light-timeline .timeline-btns{display:grid;grid-template-columns:1fr 1fr}
+ #tokugawa .light-timeline .timeline-btns button{font-size:11px;padding:10px;min-height:48px}
+ #tokugawa .light-timeline .timeline-slot{padding:8px 10px}
+}
+@media(max-width:400px){#tokugawa .light-timeline .timeline-btns{grid-template-columns:1fr}}
