@@ -62,8 +62,104 @@ const factPopover=document.getElementById('factPopover'),factPopoverText=documen
 function showFact(text){factPopoverText.textContent=text;factPopover.classList.add('open');clearTimeout(factTimer);factTimer=setTimeout(()=>factPopover.classList.remove('open'),8500)}
 factPopover.querySelector('button').addEventListener('click',()=>factPopover.classList.remove('open'));
 document.querySelectorAll('.hotspot').forEach(h=>h.addEventListener('click',e=>{e.stopPropagation();showFact(h.dataset.hot)}));
-// timeline
-let timeline=[];document.querySelectorAll('#timelineBtns button').forEach(b=>b.addEventListener('click',()=>{b.classList.add('used');timeline.push({o:+b.dataset.order,t:b.textContent});renderTimeline()}));function renderTimeline(){document.getElementById('timelineOutput').innerHTML=timeline.map(x=>'<span>'+x.t+'</span>').join('')}function checkTimeline(){const f=document.getElementById('timelineFeedback');if(timeline.length<6){f.textContent='Add all six periods first.';return}f.textContent=timeline.every((x,i)=>x.o===i+1)?'Correct — your chronology is in order.':'Not yet. Reset and try again from the earliest period.'}function resetTimeline(){timeline=[];document.querySelectorAll('#timelineBtns button').forEach(b=>b.classList.remove('used'));renderTimeline();document.getElementById('timelineFeedback').textContent=''}
+// Interactive history chronology — each period can be selected only once.
+const timelineButtons=[...document.querySelectorAll('#timelineBtns button[data-order]')];
+const timelineTotal=timelineButtons.length;
+let timeline=[];
+
+function timelineMessage(message,kind=''){
+ const el=document.getElementById('timelineFeedback');
+ if(!el)return;
+ el.textContent=message;
+ el.dataset.state=kind;
+}
+function shuffleTimelineChoices(){
+ const wrap=document.getElementById('timelineBtns');
+ if(!wrap)return;
+ const shuffled=[...timelineButtons];
+ for(let i=shuffled.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];
+ }
+ // Never begin with the answers already in order.
+ if(shuffled.every((button,index)=>Number(button.dataset.order)===index+1))shuffled.reverse();
+ shuffled.forEach(button=>wrap.appendChild(button));
+}
+function renderTimeline(){
+ const output=document.getElementById('timelineOutput');
+ if(!output)return;
+ output.replaceChildren();
+ for(let i=0;i<timelineTotal;i++){
+  const item=timeline[i];
+  const slot=document.createElement(item?'button':'div');
+  slot.className='timeline-slot'+(item?' filled':' empty');
+  const number=document.createElement('span');
+  number.className='timeline-slot-num';
+  number.textContent=String(i+1).padStart(2,'0');
+  const label=document.createElement('span');
+  label.className='timeline-slot-label';
+  label.textContent=item?item.t:'Choose a period';
+  slot.append(number,label);
+  if(item){
+   slot.type='button';
+   slot.title='Remove this period from your timeline';
+   slot.setAttribute('aria-label','Remove '+item.t+' from position '+(i+1));
+   slot.addEventListener('click',()=>removeTimeline(i));
+  }
+  output.appendChild(slot);
+ }
+ const selected=new Set(timeline.map(item=>item.o));
+ timelineButtons.forEach(button=>{
+  const used=selected.has(Number(button.dataset.order));
+  button.disabled=used;
+  button.classList.toggle('used',used);
+  button.setAttribute('aria-pressed',String(used));
+ });
+ const count=document.getElementById('timelineCount');
+ if(count)count.textContent=timeline.length+' of '+timelineTotal+' placed';
+ const undo=document.getElementById('timelineUndo');
+ if(undo)undo.disabled=timeline.length===0;
+}
+function addTimeline(button){
+ const order=Number(button.dataset.order);
+ if(timeline.some(item=>item.o===order)||timeline.length>=timelineTotal)return;
+ const title=button.textContent.trim();
+ timeline.push({o:order,t:title});
+ renderTimeline();
+ timelineMessage(timeline.length===timelineTotal?
+  'All seven periods are placed. Select Check order to see your result.':
+  'Added '+title+'. Choose the next period.','');
+}
+function removeTimeline(index){
+ if(index<0||index>=timeline.length)return;
+ const item=timeline.splice(index,1)[0];
+ renderTimeline();
+ timelineMessage('Removed '+item.t+'. You can choose another period for that position.','');
+}
+function undoTimeline(){
+ if(!timeline.length)return;
+ removeTimeline(timeline.length-1);
+}
+function checkTimeline(){
+ if(timeline.length<timelineTotal){
+  timelineMessage('Place all '+timelineTotal+' periods first. '+(timelineTotal-timeline.length)+' still to go.','info');
+  return;
+ }
+ const firstIncorrect=timeline.findIndex((item,index)=>item.o!==index+1);
+ if(firstIncorrect===-1){
+  timelineMessage('Correct! Your timeline runs from the Nara period to the Meiji period. Well done.','success');
+ }else{
+  timelineMessage('Not quite: position '+(firstIncorrect+1)+' is out of order. Compare the dates, then tap a placed period to remove it and try again.','error');
+ }
+}
+function resetTimeline(){
+ timeline=[];
+ shuffleTimelineChoices();
+ renderTimeline();
+ timelineMessage('Select the earliest period to begin.','');
+}
+timelineButtons.forEach(button=>button.addEventListener('click',()=>addTimeline(button)));
+resetTimeline();
 // role scenarios
 const roleText={samurai:'You serve a daimyo. In wartime you train as a warrior; in long periods of peace you may also work as an administrator. Loyalty, education and status shape your life.',peasant:'You produce food on land controlled by the warrior elite. Your work is essential, but taxes and crop failure can make life difficult.',artisan:'You make specialised goods — pottery, tools, paper, cloth or swords — that farmers and warrior households cannot easily make themselves.',merchant:'Your formal social status is low because you do not produce food or goods, yet trade and lending can make you wealthy in growing towns.'};document.querySelectorAll('.role').forEach(r=>r.addEventListener('click',()=>{document.querySelectorAll('.role').forEach(x=>x.classList.remove('active'));r.classList.add('active');const d=document.getElementById('roleDrawer');d.innerHTML='<b>'+r.querySelector('h3').textContent+':</b> '+roleText[r.dataset.role];bump(d)}));
 // flash cards
