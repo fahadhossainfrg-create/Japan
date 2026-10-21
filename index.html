@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Japan Under the Shoguns — Immersive Year 8 Experience</title>
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/site.css?v=timeline-v2">
 </head>
 <body>
 <div class="progress" id="progress"></div>
@@ -380,11 +380,23 @@
   </div>
 </div>
 
-<div class="timeline-box light-timeline reveal">
-  <h3>Timeline builder</h3><p>Click the major periods from earliest to latest. The Warring States era overlaps late Muromachi rule, so it is explained in the Era Evidence Explorer rather than treated as a completely separate dynasty.</p>
+<div class="timeline-box light-timeline reveal" id="timelineBuilder">
+  <div class="timeline-heading"><div><h3>Timeline builder</h3><p>Put the seven periods of Japanese history in order, from earliest to latest. The choices are mixed up. Choose each period once to build your timeline.</p></div><div class="timeline-count" id="timelineCount" aria-live="polite">0 of 7 placed</div></div>
+  <div class="timeline-note"><strong>History note:</strong> The Sengoku (Warring States) era overlapped late Muromachi rule and the beginning of the Azuchi–Momoyama period. It is not a separate shogunate, so it is explored in the Era Evidence Explorer.</div>
+  <div class="timeline-label">Choose the next period</div>
   <div class="timeline-btns" id="timelineBtns">
-    <button data-order="1">Nara 710–794</button><button data-order="2">Heian 794–1185</button><button data-order="3">Kamakura 1185–1333</button><button data-order="4">Muromachi / Ashikaga 1338–1573</button><button data-order="5">Tokugawa 1603–1868</button><button data-order="6">Meiji Restoration 1868</button>
-  </div><div class="timeline-output" id="timelineOutput"></div><button class="tiny" onclick="checkTimeline()">Check order</button> <button class="tiny alt" onclick="resetTimeline()">Reset</button><div class="feedback" id="timelineFeedback"></div>
+    <button type="button" data-order="5">Azuchi–Momoyama · 1573–1603</button>
+    <button type="button" data-order="2">Heian · 794–1185</button>
+    <button type="button" data-order="7">Meiji · 1868–1912</button>
+    <button type="button" data-order="1">Nara · 710–794</button>
+    <button type="button" data-order="6">Edo / Tokugawa · 1603–1868</button>
+    <button type="button" data-order="4">Muromachi / Ashikaga · 1336–1573</button>
+    <button type="button" data-order="3">Kamakura · 1185–1333</button>
+  </div>
+  <div class="timeline-label" id="timelineOrderLabel">Your timeline · tap a placed period to remove it</div>
+  <div class="timeline-output" id="timelineOutput" role="group" aria-labelledby="timelineOrderLabel"></div>
+  <div class="timeline-actions"><button type="button" class="tiny" onclick="checkTimeline()">Check order</button><button type="button" class="tiny alt" id="timelineUndo" onclick="undoTimeline()" disabled>Undo last</button><button type="button" class="tiny alt" onclick="resetTimeline()">Start again</button></div>
+  <div class="feedback timeline-feedback" id="timelineFeedback" role="status" aria-live="polite">Select the earliest period to begin.</div>
 </div>
 
 <div class="knowledge reveal"><h3>Tokugawa Ieyasu — how he turned victory into a dynasty</h3><div class="study-details">
@@ -667,6 +679,6 @@
 
 <div class="fact-popover" id="factPopover"><button type="button" aria-label="Close">✕</button><b>History clue</b><span id="factPopoverText"></span></div>
 <div class="lightbox" id="lightbox"><button onclick="closeLightbox()">✕</button><img id="lightboxImg" alt="enlarged photograph"></div>
-<script src="assets/js/site.js?v=chapter-picker-fix-2" defer></script>
+<script src="assets/js/site.js?v=timeline-v2" defer></script>
 </body>
 </html>
